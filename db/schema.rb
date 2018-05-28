@@ -10,10 +10,20 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_28_200720) do
+ActiveRecord::Schema.define(version: 2018_05_28_202140) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "messages", force: :cascade do |t|
+    t.bigint "missionary_id"
+    t.bigint "person_id"
+    t.string "text"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["missionary_id"], name: "index_messages_on_missionary_id"
+    t.index ["person_id"], name: "index_messages_on_person_id"
+  end
 
   create_table "missionaries", force: :cascade do |t|
     t.integer "person_id"
@@ -27,6 +37,15 @@ ActiveRecord::Schema.define(version: 2018_05_28_200720) do
     t.bigint "organization_id"
     t.index ["organization_id"], name: "index_missionaries_on_organization_id"
     t.index ["person_id"], name: "index_missionaries_on_person_id"
+  end
+
+  create_table "missionaries_people", force: :cascade do |t|
+    t.bigint "missionary_id"
+    t.bigint "person_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["missionary_id"], name: "index_missionaries_people_on_missionary_id"
+    t.index ["person_id"], name: "index_missionaries_people_on_person_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -45,4 +64,52 @@ ActiveRecord::Schema.define(version: 2018_05_28_200720) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "people_prayer_requests", force: :cascade do |t|
+    t.bigint "person_id"
+    t.bigint "prayer_request_id"
+    t.index ["person_id"], name: "index_people_prayer_requests_on_person_id"
+    t.index ["prayer_request_id"], name: "index_people_prayer_requests_on_prayer_request_id"
+  end
+
+  create_table "photos", force: :cascade do |t|
+    t.text "path"
+    t.bigint "missionary_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["missionary_id"], name: "index_photos_on_missionary_id"
+  end
+
+  create_table "photos_status_updates", force: :cascade do |t|
+    t.bigint "photo_id"
+    t.bigint "status_update_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["photo_id"], name: "index_photos_status_updates_on_photo_id"
+    t.index ["status_update_id"], name: "index_photos_status_updates_on_status_update_id"
+  end
+
+  create_table "prayer_requests", force: :cascade do |t|
+    t.bigint "missionary_id"
+    t.string "text"
+    t.boolean "complete", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["missionary_id"], name: "index_prayer_requests_on_missionary_id"
+  end
+
+  create_table "status_updates", force: :cascade do |t|
+    t.bigint "missionary_id"
+    t.string "text"
+    t.bigint "prayer_request_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["missionary_id"], name: "index_status_updates_on_missionary_id"
+    t.index ["prayer_request_id"], name: "index_status_updates_on_prayer_request_id"
+  end
+
+  add_foreign_key "messages", "missionaries"
+  add_foreign_key "messages", "people"
+  add_foreign_key "photos", "missionaries"
+  add_foreign_key "status_updates", "missionaries"
+  add_foreign_key "status_updates", "prayer_requests"
 end

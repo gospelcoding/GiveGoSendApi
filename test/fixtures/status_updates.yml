@@ -1,0 +1,11 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  missionary: one
+  text: MyString
+  prayer_request: one
+
+two:
+  missionary: two
+  text: MyString
+  prayer_request: two
