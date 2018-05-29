@@ -10,10 +10,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_28_202140) do
+ActiveRecord::Schema.define(version: 2018_05_29_151125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "kids", force: :cascade do |t|
+    t.string "name"
+    t.bigint "missionary_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["missionary_id"], name: "index_kids_on_missionary_id"
+  end
 
   create_table "messages", force: :cascade do |t|
     t.bigint "missionary_id"
@@ -26,7 +34,6 @@ ActiveRecord::Schema.define(version: 2018_05_28_202140) do
   end
 
   create_table "missionaries", force: :cascade do |t|
-    t.integer "person_id"
     t.string "subtitle"
     t.string "description"
     t.string "link"
@@ -35,8 +42,12 @@ ActiveRecord::Schema.define(version: 2018_05_28_202140) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.bigint "organization_id"
+    t.boolean "couple"
+    t.integer "gender"
+    t.string "name"
+    t.string "husband_name"
+    t.string "wife_name"
     t.index ["organization_id"], name: "index_missionaries_on_organization_id"
-    t.index ["person_id"], name: "index_missionaries_on_person_id"
   end
 
   create_table "missionaries_people", force: :cascade do |t|
@@ -62,6 +73,8 @@ ActiveRecord::Schema.define(version: 2018_05_28_202140) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "missionary_id"
+    t.index ["missionary_id"], name: "index_people_on_missionary_id"
   end
 
   create_table "people_prayer_requests", force: :cascade do |t|
@@ -107,6 +120,7 @@ ActiveRecord::Schema.define(version: 2018_05_28_202140) do
     t.index ["prayer_request_id"], name: "index_status_updates_on_prayer_request_id"
   end
 
+  add_foreign_key "kids", "missionaries"
   add_foreign_key "messages", "missionaries"
   add_foreign_key "messages", "people"
   add_foreign_key "photos", "missionaries"
