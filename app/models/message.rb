@@ -1,4 +1,4 @@
 class Message < ApplicationRecord
   belongs_to :missionary
-  belongs_to :person
+  belongs_to :user
 end

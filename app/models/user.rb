@@ -1,4 +1,4 @@
-class Person < ApplicationRecord
+class User < ApplicationRecord
   belongs_to :missionary, required: false  # My own missionary profile
 
   has_and_belongs_to_many :missionaries  # Missionaries that I follow

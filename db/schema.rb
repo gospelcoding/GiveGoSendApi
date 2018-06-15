@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_29_152524) do
+ActiveRecord::Schema.define(version: 2018_06_06_134616) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,12 +25,12 @@ ActiveRecord::Schema.define(version: 2018_05_29_152524) do
 
   create_table "messages", force: :cascade do |t|
     t.bigint "missionary_id"
-    t.bigint "person_id"
+    t.bigint "user_id"
     t.string "text"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["missionary_id"], name: "index_messages_on_missionary_id"
-    t.index ["person_id"], name: "index_messages_on_person_id"
+    t.index ["user_id"], name: "index_messages_on_user_id"
   end
 
   create_table "missionaries", force: :cascade do |t|
@@ -52,11 +52,11 @@ ActiveRecord::Schema.define(version: 2018_05_29_152524) do
 
   create_table "missionaries_people", force: :cascade do |t|
     t.bigint "missionary_id"
-    t.bigint "person_id"
+    t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["missionary_id"], name: "index_missionaries_people_on_missionary_id"
-    t.index ["person_id"], name: "index_missionaries_people_on_person_id"
+    t.index ["user_id"], name: "index_missionaries_people_on_user_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -66,22 +66,11 @@ ActiveRecord::Schema.define(version: 2018_05_29_152524) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "people", force: :cascade do |t|
-    t.string "name"
-    t.string "email"
-    t.json "prefs", default: {}
-    t.string "password_digest"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.bigint "missionary_id"
-    t.index ["missionary_id"], name: "index_people_on_missionary_id"
-  end
-
   create_table "people_prayer_requests", force: :cascade do |t|
-    t.bigint "person_id"
+    t.bigint "user_id"
     t.bigint "prayer_request_id"
-    t.index ["person_id"], name: "index_people_prayer_requests_on_person_id"
     t.index ["prayer_request_id"], name: "index_people_prayer_requests_on_prayer_request_id"
+    t.index ["user_id"], name: "index_people_prayer_requests_on_user_id"
   end
 
   create_table "photos", force: :cascade do |t|
@@ -120,9 +109,20 @@ ActiveRecord::Schema.define(version: 2018_05_29_152524) do
     t.index ["prayer_request_id"], name: "index_status_updates_on_prayer_request_id"
   end
 
+  create_table "users", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.json "prefs", default: {}
+    t.string "password_digest"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "missionary_id"
+    t.index ["missionary_id"], name: "index_users_on_missionary_id"
+  end
+
   add_foreign_key "kids", "missionaries"
   add_foreign_key "messages", "missionaries"
-  add_foreign_key "messages", "people"
+  add_foreign_key "messages", "users"
   add_foreign_key "photos", "missionaries"
   add_foreign_key "status_updates", "missionaries"
   add_foreign_key "status_updates", "prayer_requests"

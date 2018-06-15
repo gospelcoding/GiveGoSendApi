@@ -1,3 +1,5 @@
-json.person do
-  json.call(@person, :id, :name, :email, :prefs)
+
+
+json.user do
+  json.call(@user, :id, :name, :email, :prefs)
 end
